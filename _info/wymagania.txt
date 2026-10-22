@@ -1,0 +1,19 @@
+1. Projekty muszą być napisane w C++.
+2. Wszystkie projekty muszą być wykonane z wykorzystaniem narzędzi i technik omawianych na wykładzie lub (w specjalnych przypadkach) narzędzi uzgodnionych z prowadzącym.
+3. W projekcie nie mogą się znaleźć rozwiązania bazujące na przykład na OpenGL lub DirectX (od tego będzie inny przedmiot :-)).
+4. Wybór systemu operacyjnego zależy od decyzji autorów (przypadku korzystania z systemu Linux autorzy projektu nie dostają żadnej taryfy ulgowej - program uruchomiony ma działać!!!!)
+5. W trakcie semestru autorzy mogą liczyć na pomoc prowadzącego wykład lub projekt w rozwiązywaniu napotkanych problemów.
+6. Projekt musi zostać oddany w postaci działającego programu wraz z dającymi się skompilować źródłami oraz kompletnej dokumentacji projektu koniecznie w postaci pliku PDF.
+7. Zarówno program, jego kody źródłowe, jak i elektroniczna wersja dokumentacji powinny zostać dostarczone do prowadzącego w postaci skompresowanego pliku o nazwie "numer_projektu.7z" (z kompresją ustawioną na "Ultra") w którym będą znajdowały się katalogi "DOC", "SRC" oraz "BIN". Mailem powinien zostać dostarczony jedynie LINK do archiwum. Proszę nie przesyłać projektów jako załączniki do listu!
+8. Dokumentacja projektu powinna być w miarę możliwości zgodna z wzorcemj.
+9. Projekt będzie oceniany zgodnie z poniższymi kryteriami:
+
+Terminowe oddanie projektu (max. 40pkt)
+każdy dzień opóźnienia oznacza 8pkt. mniej
+Przygotowanie dokumentacji (max. 25pkt)
+Wykonanie projektu (max. 30pkt)
+w tym 20pkt. za spełnienie wymagań podstawowych
+Punkty wg. uznania prowadzącego (max. 5pkt)
+w zależności od indywidualnych sytuacji
+11. Arkusz oceny: w każdej rubryce, w której liczba punktów jest mniejsza od maksymalnej (z wyjątkiem punktów według uznania), prowadzący umieszcza krótką informację uzasadniającą punktację.
+12. Wszystkie osoby w grupie projektowej otrzymują taką samą ocenę.

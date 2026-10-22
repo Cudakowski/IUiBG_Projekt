@@ -1,0 +1,20 @@
+
+
+Proponuję zrobić dokumentacje w latex'sie na overleafie i jak tu potem wkleić do repozytorium.
+
+Jako punkt startowy wrzuciłem tu mój kod z drugich labów jako taki punkt odniesienia.
+
+Dorobiłem CMakeLists.txt i inne foldery rozdzielające robote zarówno w src jak i include.
+
+Kompilowanie:
+cd SRC
+mkdir build
+cd build
+cmake ..
+cmake --build . -j
+
+===== Wpisujcie tu rzeczy jeszcze do zrobienia. =====
+
+- Usunąć pliki które są jak na razie tu tymczasowo:
+    - Demo/
+    - przyklady/
