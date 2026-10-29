@@ -65,3 +65,21 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/image
     ${CMAKE_CURRENT_SOURCE_DIR}/include/view
 )
+
+# prosty test load/save BMP (bez GUI)
+add_executable(test_bmp
+    src/image/test_bmp.cpp
+    src/image/image.cpp
+)
+target_include_directories(test_bmp PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/image
+)
+target_compile_definitions(test_bmp PRIVATE
+    SAMPLES_DIR="${CMAKE_SOURCE_DIR}/../assets/samples"
+    SFML_STATIC
+)
+target_link_libraries(test_bmp PRIVATE
+    SFML::Graphics
+    SFML::System
+)
