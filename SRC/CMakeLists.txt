@@ -66,7 +66,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/view
 )
 
-# prosty test load/save BMP (bez GUI)
+# test image bez calego gui
 add_executable(test_bmp
     src/image/test_bmp.cpp
     src/image/image.cpp
