@@ -184,6 +184,148 @@ static bool testEdgeCases(const std::string& dir)
     return true;
 }
 
+// obraz w x h, piksel (x,y) ma R=x, G=y, B=kanal
+static ImageBuffer makeGrid(int w, int h, unsigned char blue)
+{
+    ImageBuffer img;
+    img.width = w;
+    img.height = h;
+    img.rgba.resize(static_cast<std::size_t>(w) * h * 4);
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            const std::size_t i = (static_cast<std::size_t>(y) * w + x) * 4;
+            img.rgba[i] = static_cast<unsigned char>(x);
+            img.rgba[i + 1] = static_cast<unsigned char>(y);
+            img.rgba[i + 2] = blue;
+            img.rgba[i + 3] = 255;
+        }
+    }
+    return img;
+}
+
+static bool pixelIs(const ImageBuffer& img, int x, int y, int r, int g, int b)
+{
+    const std::size_t i = (static_cast<std::size_t>(y) * img.width + x) * 4;
+    return img.rgba[i] == r && img.rgba[i + 1] == g && img.rgba[i + 2] == b;
+}
+
+static bool testCropStitchMemory()
+{
+    ImageBuffer a = makeGrid(10, 8, 0);
+    ImageBuffer b = makeGrid(10, 8, 200);
+
+    ImageBuffer s = cropStitch(a, b, 2, 3, 4, 2);
+    if (s.width != 8 || s.height != 2 || s.rgba.size() != 8 * 2 * 4) {
+        std::cerr << "cropStitch: zly rozmiar " << s.width << "x" << s.height << "\n";
+        return false;
+    }
+    // lewa polowa z a, prawa z b, te same wspolrzedne
+    if (!pixelIs(s, 0, 0, 2, 3, 0) || !pixelIs(s, 3, 1, 5, 4, 0)) {
+        std::cerr << "cropStitch: zla lewa czesc\n";
+        return false;
+    }
+    if (!pixelIs(s, 4, 0, 2, 3, 200) || !pixelIs(s, 7, 1, 5, 4, 200)) {
+        std::cerr << "cropStitch: zla prawa czesc\n";
+        return false;
+    }
+
+    // wychodzi poza obraz -> przyciete
+    ImageBuffer cut = cropStitch(a, b, 8, 6, 5, 5);
+    if (cut.width != 4 || cut.height != 2) {
+        std::cerr << "cropStitch: przyciecie nie dziala " << cut.width << "x" << cut.height << "\n";
+        return false;
+    }
+
+    // ujemne x,y tez przycinane
+    ImageBuffer neg = cropStitch(a, b, -3, -1, 5, 3);
+    if (neg.width != 4 || neg.height != 2 || !pixelIs(neg, 0, 0, 0, 0, 0)) {
+        std::cerr << "cropStitch: ujemne wspolrzedne zle\n";
+        return false;
+    }
+
+    // rozne rozmiary -> bierze czesc wspolna
+    ImageBuffer small = makeGrid(5, 5, 0);
+    ImageBuffer mixed = cropStitch(small, b, 0, 0, 10, 10);
+    if (mixed.width != 10 || mixed.height != 5) {
+        std::cerr << "cropStitch: rozne rozmiary zle " << mixed.width << "x" << mixed.height << "\n";
+        return false;
+    }
+
+    // calkiem poza / zerowy rozmiar -> pusto
+    if (cropStitch(a, b, 50, 50, 5, 5).width != 0 || cropStitch(a, b, 0, 0, 0, 5).width != 0) {
+        std::cerr << "cropStitch: powinno byc pusto\n";
+        return false;
+    }
+    ImageBuffer empty;
+    if (cropStitch(empty, b, 0, 0, 2, 2).width != 0) {
+        std::cerr << "cropStitch: pusty obraz powinien dac pusto\n";
+        return false;
+    }
+
+    std::cout << "ok cropStitch na bufferach w pamieci\n";
+    return true;
+}
+
+static bool testCropStitchSamples(const std::string& dir)
+{
+    ImageBuffer left, right;
+    if (!loadImage(dir + "/para_same_a.bmp", left) || !loadImage(dir + "/para_same_b.bmp", right)) {
+        std::cerr << "cropStitch samples: nie wczytalo pary\n";
+        return false;
+    }
+
+    ImageBuffer s = cropStitch(left, right, 16, 16, 32, 32);
+    const std::string outPath = dir + "/_tmp_stitch.bmp";
+    if (s.width != 64 || s.height != 32 || !saveImage(outPath, s)) {
+        std::cerr << "cropStitch samples: zly wynik albo zapis\n";
+        return false;
+    }
+
+    ImageBuffer again;
+    if (!loadImage(outPath, again) || !samePixels(s, again)) {
+        std::cerr << "cropStitch samples: po zapisie inne piksele\n";
+        return false;
+    }
+
+    std::cout << "ok cropStitch na sample + zapis BMP\n";
+    return true;
+}
+
+static bool testFormats(const std::string& dir)
+{
+    ImageBuffer src;
+    if (!loadImage(dir + "/para_diff_a.bmp", src)) {
+        std::cerr << "formaty: nie wczytalo bmp\n";
+        return false;
+    }
+
+    // png bezstratny, ma wyjsc to samo
+    const std::string png = dir + "/_tmp_format.png";
+    ImageBuffer fromPng;
+    if (!saveImage(png, src) || !loadImage(png, fromPng) || !samePixels(src, fromPng)) {
+        std::cerr << "formaty: png round-trip fail\n";
+        return false;
+    }
+
+    // jpg stratny, sprawdzam tylko rozmiar
+    const std::string jpg = dir + "/_tmp_format.jpg";
+    ImageBuffer fromJpg;
+    if (!saveImage(jpg, src) || !loadImage(jpg, fromJpg)
+        || fromJpg.width != src.width || fromJpg.height != src.height) {
+        std::cerr << "formaty: jpg round-trip fail\n";
+        return false;
+    }
+
+    // nieznane rozszerzenie
+    if (saveImage(dir + "/_tmp_format.xyz", src)) {
+        std::cerr << "formaty: .xyz nie powinno sie zapisac\n";
+        return false;
+    }
+
+    std::cout << "ok formaty png/jpg\n";
+    return true;
+}
+
 int main()
 {
     const std::string dir = SAMPLES_DIR;
@@ -205,6 +347,12 @@ int main()
     if (!testDiffSamples(dir))
         ok = false;
     if (!testEdgeCases(dir))
+        ok = false;
+    if (!testCropStitchMemory())
+        ok = false;
+    if (!testCropStitchSamples(dir))
+        ok = false;
+    if (!testFormats(dir))
         ok = false;
 
     return ok ? 0 : 1;
