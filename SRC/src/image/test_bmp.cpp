@@ -316,6 +316,25 @@ static bool testFormats(const std::string& dir)
         return false;
     }
 
+    // gotowe sample png/jpg z assets
+    ImageBuffer pngSample, jpgSample;
+    if (!loadImage(dir + "/para_same_a.png", pngSample) || pngSample.width != 64) {
+        std::cerr << "formaty: nie wczytalo para_same_a.png\n";
+        return false;
+    }
+    if (!loadImage(dir + "/para_same_b.jpg", jpgSample) || jpgSample.width != 64) {
+        std::cerr << "formaty: nie wczytalo para_same_b.jpg\n";
+        return false;
+    }
+    if (!loadImage(dir + "/para_diff_a.png", pngSample) || pngSample.width != 80) {
+        std::cerr << "formaty: nie wczytalo para_diff_a.png\n";
+        return false;
+    }
+    if (!loadImage(dir + "/para_diff_b.jpg", jpgSample) || jpgSample.width != 120) {
+        std::cerr << "formaty: nie wczytalo para_diff_b.jpg\n";
+        return false;
+    }
+
     // nieznane rozszerzenie
     if (saveImage(dir + "/_tmp_format.xyz", src)) {
         std::cerr << "formaty: .xyz nie powinno sie zapisac\n";

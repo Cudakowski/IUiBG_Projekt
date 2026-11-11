@@ -10,8 +10,8 @@ Rodzaj danych to bitmapy / zdjęcia rastrowe, czyli siatka pikseli z kolorami.
 Postać to zwykły plik na dysku, wskazany ścieżką.
 
 Na wymaganiach podstawowych obsługujemy format BMP. Przy rozszerzeniach
-dojdą też PNG i JPG, żeby dało się wczytać typowe zdjęcia bez ręcznej
-konwersji.
+są też PNG i JPG (wczytanie i zapis przez SFML), żeby dało się otworzyć
+typowe zdjęcia bez ręcznej konwersji.
 
 Od pliku oczekujemy, że da się go poprawnie otworzyć i odczytać kolory R, G, B
 (wartości 0-255). Jak w pliku jest kanał alfa, zapamiętujemy go przy wczytaniu,
