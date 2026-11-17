@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-// Jeśli masz już plik nagłówkowy Emilii, usuń poniższą definicję i użyj #include
+
 struct ImageBuffer {
     int width = 0;
     int height = 0;
@@ -24,7 +24,7 @@ bool Viewport::setLeftImage(const ImageBuffer& buffer)
     sizeL_ = size;
 
     spriteL_.emplace(texL_);
-    // Ustawiamy origin na środek obrazka, żeby (0,0) offsetu było dokładnie na środku panelu
+
     spriteL_->setOrigin({sizeL_.x / 2.f, sizeL_.y / 2.f});
 
     recalculateRelativeScale();
@@ -57,7 +57,7 @@ void Viewport::recalculateRelativeScale()
 {
     if (state_.relativeScaleEnabled && sizeL_.x > 0 && sizeL_.y > 0 && sizeR_.x > 0 && sizeR_.y > 0)
     {
-        // Dopasowujemy skalę prawego obrazu względem lewego (np. po szerokości)
+
         relativeFactorR_ = static_cast<float>(sizeL_.x) / static_cast<float>(sizeR_.x);
     }
     else
