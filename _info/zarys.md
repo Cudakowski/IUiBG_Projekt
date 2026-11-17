@@ -73,7 +73,7 @@ Wspólny kontrakt na start (1 plik nagłówkowy) — potem praca prawie bez koli
 ### Sprint 2 — 10–23.11 · Wymagania podstawowe DONE
 | Emilia | Wojtek | Krzysztof |
 |--------|--------|-----------|
-| Algorytm różnicowy \|ΔR\|,|ΔG\|,|ΔB\| | **Synchroniczny** zoom + pan | Pełne podpięcie Zapisz różnicę → BMP |
+| Algorytm różnicowy \|ΔR\|, \|ΔG\|, \|ΔB\| | **Synchroniczny** zoom + pan | Pełne podpięcie Zapisz różnicę → BMP |
 | Zapis wyniku do BMP | Stabilny clamping offsetów | Docs: zadania (§4e), algorytmy różnicy (§6 część) |
 | Edge cases: różne ścieżki, błędy pliku | | Log błędów w UI |
 
